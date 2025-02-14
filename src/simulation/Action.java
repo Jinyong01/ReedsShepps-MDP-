@@ -11,4 +11,9 @@ public class Action {
         this.gear = gear;
         this.steering = steering;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Action(gear=%s, steering=%s)", gear, steering);
+    }
 }

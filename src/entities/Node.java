@@ -60,4 +60,9 @@ public class Node implements Comparable<Node> {
     public int compareTo(Node other) {
         return Double.compare(this.f, other.f);
     }
+
+    @Override
+    public String toString() {
+        return String.format("Node(x=%.2f, y=%.2f, theta=%.2f, action=%s)", x, y, theta * 180 / Math.PI, prevAction);
+    }
 }

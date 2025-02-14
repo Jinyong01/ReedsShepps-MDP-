@@ -6,15 +6,15 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
-//import pathfinding.Hamiltonian;
-//import pathfinding.Hybrid_astar;
+import pathfinding.Hamiltonian;
+import pathfinding.Hybrid_astar;
 import entities.Grid;
 import entities.Obstacle;
 import entities.Node;
 import enums.Direction;
-// import enums.Gear;
-// import enums.Steering;
-// import simulation.Action;
+import enums.Gear;
+import enums.Steering;
+import simulation.Action;
 
 public class Task1 {
     private final List<Node> paths = new ArrayList<>();

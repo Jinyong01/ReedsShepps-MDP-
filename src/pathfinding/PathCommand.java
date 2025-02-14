@@ -200,6 +200,7 @@ public class PathCommand {
         }
 
         return commands;
+        //return new PathResult(commands, gridPath);
     }
 
     public static String constructJson(List<String> commands, List<int[]> path) {
@@ -232,6 +233,15 @@ public class PathCommand {
         return new PathResult(commands, gridPath);
     }
 
+    // public static class PathResult {
+    //     public List<String> commands;
+    //     public List<int[]> path;
+
+    //     public PathResult(List<String> commands, List<int[]> path) {
+    //         this.commands = commands;
+    //         this.path = path;
+    //     }
+    // }
     
 }
 

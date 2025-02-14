@@ -259,7 +259,8 @@ public class Hamiltonian {
         for (Obstacle obstacle : obstacles) {
             map.addObstacle(obstacle);
         }
-        Hamiltonian tsp = new Hamiltonian(map, obstacles, 5, 15, 0, -Math.PI / 2, "euclidean", 25);
+        //Hamiltonian tsp = new Hamiltonian(map, obstacles, 5, 15, 0, -Math.PI / 2, "euclidean", 25);
+        Hamiltonian tsp = new Hamiltonian(map, new ArrayList<>(obstacles), 10, 10, 0, -Math.PI / 2, "euclidean", 25);
         List<Obstacle> path = tsp.findNearestNeighborPath();
         System.out.println("\nShortest Path:");
         System.out.println(path);
