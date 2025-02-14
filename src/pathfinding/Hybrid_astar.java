@@ -28,7 +28,8 @@ public class Hybrid_astar {
     //private boolean simulate;
     private int thetaBins;
 
-    public Hybrid_astar(Grid map, double x_0, double y_0, double theta_0, double x_f, double y_f, double theta_f, double thetaOffset, int steeringChangeCost, int gearChangeCost, double L, double minR, String heuristic, boolean simulate, int thetaBins) {
+
+    public Hybrid_astar(Grid map, double x_0, double y_0, double theta_0, double x_f, double y_f, double theta_f, double thetaOffset, double L, double minR, String heuristic, boolean simulate, int thetaBins) {
         this.map = map;
         this.x_0 = x_0;
         this.y_0 = y_0;

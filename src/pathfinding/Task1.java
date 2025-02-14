@@ -8,11 +8,12 @@ import java.util.Map;
 import java.util.HashMap;
 import entities.*;
 import enums.Direction;
+import simulation.Action;
 
 public class Task1 {
     private final List<Node> paths = new ArrayList<>();
     private final List<List<String>> commands = new ArrayList<>();
-    private final List<List<int[]>> android = new ArrayList<>();
+    private final List<List<Integer>> android = new ArrayList<>();
     private final List<Integer> obstacleID = new ArrayList<>();
     private final List<String> imageID = new ArrayList<>();
 
@@ -47,25 +48,40 @@ public class Task1 {
         List<Obstacle> obstaclePath = tsp.findNearestNeighborPath();
 
         for (Obstacle obstacle : obstaclePath) {
-            List<Node> validCheckpoints = Obstacle.obstacleToCheckpointAll(map, obstacle, -Math.PI / 2);
+            List<double[]> validCheckpoints = Hamiltonian.obstacleToCheckpointAll(map, obstacle, -Math.PI / 2);
+            List<Node> validNodes = new ArrayList<>();
+            for (double[] checkpoint : validCheckpoints) {
+                double x = checkpoint[0];
+                double y = checkpoint[1];
+                double theta = checkpoint[2];
+                int obstacleId = (int) checkpoint[3];
+                Action prevAction = null; // Replace with a default Action if needed
+                Node parent = null; // Replace with a default Node if needed
+
+                Node node = new Node(x, y, theta, prevAction, parent);
+                validNodes.add(node);
+            }
+            
             List<Node> path = null;
-            while (path == null && !validCheckpoints.isEmpty()) {
-                Node checkpoint = validCheckpoints.remove(0);
+            while (path == null && !validNodes.isEmpty()) {
+                Node checkpoint = validNodes.remove(0);
                 System.out.println("Routing to obstacle...");
-                Hybrid_astar algo = new Hybrid_astar(map, currentPos.x, currentPos.y, currentPos.theta, checkpoint.x, checkpoint.y, checkpoint.theta, 10, 10, L, minR, "euclidean", false, 24);
+                Hybrid_astar algo = new Hybrid_astar(map, currentPos.x, currentPos.y, currentPos.theta, checkpoint.x, checkpoint.y, checkpoint.theta, 10, L, minR, "euclidean", false, 24);
                 path = algo.findPath();
                 if (path == null) {
                     System.out.println("Path failed to converge, trying another final position...");
                 }
             }
 
+            //THis one link to pathCommand
             if (path != null) {
                 this.paths.addAll(path);
                 currentPos = path.get(path.size() - 1);
                 List<String> commandsList = PathCommand.constructPath2(path, L, minR);
-                this.commands.addAll(commandsList);
-                this.android.addAll(PathCommand.constructPath2(path, L, minR));
-                this.obstacleID.add(checkpoint.getId());
+                List<Integer> pathDisplay = PathCommand.constructPath2(path, L, minR);
+                this.commands.add(commandsList);
+                this.android.add(pathDisplay);
+                this.obstacleID.add(obstacle.getObstacleId());
                 PathCommand.printPath(path);
             } else {
                 System.out.println("Path could not be found, routing to next obstacle...");

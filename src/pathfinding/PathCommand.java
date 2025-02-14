@@ -8,13 +8,16 @@ import entities.*;
 
 public class PathCommand {
 
+    //rmb to add a constructPath here (alot of stuffs not included here)
+
     public static List<String> constructPath2(List<Node> path, double L, double minR) {
         List<String> commands = new ArrayList<>();
+        List<Integer> gridPath = new ArrayList<>();
         for (Node node : path) {
             // Construct commands based on the path
             commands.add("Move to (" + node.x + ", " + node.y + ") with orientation " + node.theta);
         }
-        return commands;
+        return commands , gridPath;
     }
 
     public static String constructJson(List<String> commands, List<int[]> android) {
