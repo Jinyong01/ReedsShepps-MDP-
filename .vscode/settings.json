@@ -5,6 +5,7 @@
         "lib/**/*.jar",
         "c:\\Users\\Admin\\Downloads\\json-20240303.jar",
         "json-20240303.jar.jar",
-        "json-20240303.jar"
+        "json-20240303.jar",
+        "json-20231013.jar"
     ]
 }
