@@ -2,10 +2,26 @@
     "java.project.sourcePaths": ["src"],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
-        "lib/**/*.jar",
-        "c:\\Users\\Admin\\Downloads\\json-20240303.jar",
-        "json-20240303.jar.jar",
+        //"lib/**/*.jar",
+        "/Users/tanjinyong/Downloads/json-20240303.jar",
+        //"c:\\Users\\Admin\\Downloads\\json-20240303.jar",
+        "lib/json-20240303.jar",
         "json-20240303.jar",
         "json-20231013.jar"
-    ]
+    ],
+    "files.exclude": {
+        "**/*.class": false
+    }
 }
+// {
+//     "java.project.sourcePaths": ["src"],
+//     "java.project.outputPath": "bin",
+//     "java.project.referencedLibraries": [
+//         "/Users/tanjinyong/ReedsShepps-MDP-/json-20240303.jar"
+//     ],
+//     "files.exclude": {
+//         "**/*.class": true
+//     }
+// }
+
+

@@ -2,6 +2,7 @@ package entities;
 
 import java.util.Objects;
 import simulation.Action;
+import simulation.Utils;
 
 public class Node implements Comparable<Node> {
     public double x;
@@ -35,14 +36,45 @@ public class Node implements Comparable<Node> {
         this(x, y, theta, prevAction, null);
     }
 
+    //Convert a real-word position to a grid position (Grid = 200cm, 20x20 grid)
+    // private int discretizePosition(double position) {
+    //     return (int) (position / (200.0 / 20));
+    // }
+
     private int discretizePosition(double position) {
-        return (int) (position / (200.0 / 40));
+        int discretizedPosition = (int) (position / (200.0 / 20));
+        if (discretizedPosition < 0 || discretizedPosition >= 20) {
+            throw new IllegalArgumentException("Position out of bounds: " + position);
+        }
+        return discretizedPosition;
     }
+
+    //Convert rad to angle, shift the range from [-180,180) to [0,360) and discretize into 24 bins
+    // private int discretizeTheta(double theta) {
+    //     return (int) (((theta * 180 / Math.PI + 180) / (360 / 24)));
+    // }
 
     private int discretizeTheta(double theta) {
-        return (int) (((theta * 180 / Math.PI + 180) / (360 / 24)));
+        theta = normaliseTheta(theta);
+
+        int discretizedTheta = (int) (((theta * 180 / Math.PI + 180) / (360 / 24)));
+        if (discretizedTheta < 0 || discretizedTheta >= 24) {
+            throw new IllegalArgumentException(String.format("Theta out of bounds: %d" + theta, discretizedTheta));
+        }
+        return discretizedTheta;
     }
 
+    private double normaliseTheta(double theta) {
+        theta = theta % (2 * Math.PI);
+        if (theta < -Math.PI) {
+            return theta + 2 * Math.PI;
+        } else if (theta >= Math.PI) {
+            return theta - 2 * Math.PI;
+        } else {
+            return theta;
+        }
+    }
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -63,6 +95,21 @@ public class Node implements Comparable<Node> {
 
     @Override
     public String toString() {
-        return String.format("Node(x=%.2f, y=%.2f, theta=%.2f, action=%s)", x, y, theta * 180 / Math.PI, prevAction);
+        //return String.format("Node(x=%.2f, y=%.2f, theta=%.2f, action=%s)", x, y, theta * 180 / Math.PI, prevAction);
+        return String.format("Node(x=%.2f, y=%.2f, theta=%.2f)", x, y, theta * 180 / Math.PI, prevAction);
+
     }
+
+    public double getX() {
+        return x;
+    }  
+
+    public double getY() {
+        return y;
+    }
+
+    public double getTheta() {
+        return theta;
+    }
+
 }

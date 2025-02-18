@@ -27,7 +27,7 @@ public class Utils {
             case EAST -> 0;
             case NORTH -> Math.PI / 2;
             case WEST -> Math.PI;
-            case SOUTH -> Math.PI / 2;
+            case SOUTH -> -Math.PI / 2;
             default -> throw new IllegalArgumentException("Invalid facing direction: " + facing);
         };
     }

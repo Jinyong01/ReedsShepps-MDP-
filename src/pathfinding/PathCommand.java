@@ -3,6 +3,10 @@ package pathfinding;
 import entities.*;
 import enums.Gear;
 import enums.Steering;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import simulation.Action;
@@ -12,139 +16,51 @@ import org.json.JSONObject;
 public class PathCommand {
 
     public static void printPath(List<Node> path) {
+        File fileObj = new File("nodes.json");
+        System.out.println("File will be written to: " + fileObj.getAbsolutePath());
+
+        try (FileWriter file = new FileWriter(fileObj)) {
+                file.write("[\n");
+                
+                boolean first = true;
+                // Iterate using the enhanced for-loop
+                for (Node node : path) {
+                    // If not the first element, add a comma before starting a new JSON object
+                    if (!first) {
+                        file.write(",\n");
+                    }
+                    first = false;
+                    
+                    // Print the node to the console
+                    System.out.println(node.getX() + " " + node.getY() + " " + node.getTheta());
+    
+                    // Write the node in JSON format
+                    file.write("  {\n");
+                    file.write("    \"x\": " + node.getX() + ",\n");
+                    file.write("    \"y\": " + node.getY() + ",\n");
+                    file.write("    \"theta\": " + node.getTheta() + "\n");
+                    file.write("  }");
+                }
+                
+                file.write("\n]");
+                System.out.println("Data has been written to nodes.json");
+            }
+    
+    
+        catch (IOException e) {
+                // Handle the exception by printing the stack trace or taking other appropriate action
+                e.printStackTrace();
+            }
+
         for (Node node : path) {
             System.out.println(
                 String.format("Current Node (x:%.2f, y:%.2f, theta:%.2f), Action: %s",
-                        node.x, node.y, node.theta * 180 / Math.PI, node.prevAction));
+                        node.x, node.y, node.theta * 180 / Math.PI, node.prevAction));          //convert rad to degree
         }
     }
-
+    //Basically calculate euclidean distance 
     public static double distance(Node prev, Node node) {
         return Math.sqrt(Math.pow(node.x - prev.x, 2) + Math.pow(node.y - prev.y, 2));
-    }
-
-    public static List<String> constructPath(List<Node> path, double L, double Radius) {
-        double LF = 0, SF = 0, RF = 0, LB = 0, SB = 0, RB = 0;
-        int approx = 10;
-        List<String> command = new ArrayList<>();
-        List<int[]> droid = new ArrayList<>();
-        Node prev = path.get(0);
-        double dis = 0;
-
-        for (Node node : path) {
-            droid.add(new int[]{(int) (node.x / approx) - 1, (int) (node.y / approx) - 1});
-            dis += distance(prev, node);
-            Action action = node.prevAction;
-            if (action.steering == Steering.LEFT && action.gear == Gear.FORWARD) {
-                LF += 1;
-            } else {
-                if (LF >= 1) {
-                    LF *= (L / (2 * Math.PI * Radius)) * 360;
-                    command.add(String.format("LF%03d", (int) LF));
-                    command.add(String.format("SF%03d", (int) dis));
-                    LF = 0;
-                    dis = 0;
-                }
-            }
-
-            if (action.steering == Steering.STRAIGHT && action.gear == Gear.FORWARD) {
-                SF += 1;
-            } else {
-                if (SF >= 1) {
-                    SF *= L;
-                    command.add(String.format("SF%03d", (int) SF));
-                    SF = 0;
-                    dis = 0;
-                }
-            }
-
-            if (action.steering == Steering.RIGHT && action.gear == Gear.FORWARD) {
-                RF += 1;
-            } else {
-                if (RF >= 1) {
-                    RF *= (L / (2 * Math.PI * Radius)) * 360;
-                    command.add(String.format("RF%03d", (int) RF));
-                    command.add(String.format("SF%03d", (int) dis));
-                    RF = 0;
-                    dis = 0;
-                }
-            }
-
-            if (action.steering == Steering.LEFT && action.gear == Gear.REVERSE) {
-                LB += 1;
-            } else {
-                if (LB >= 1) {
-                    LB *= (L / (2 * Math.PI * Radius)) * 360;
-                    command.add(String.format("LB%03d", (int) LB));
-                    command.add(String.format("SB%03d", (int) dis));
-                    LB = 0;
-                    dis = 0;
-                }
-            }
-
-            if (action.steering == Steering.STRAIGHT && action.gear == Gear.REVERSE) {
-                SB += 1;
-            } else {
-                if (SB >= 1) {
-                    SB *= L;
-                    command.add(String.format("SB%03d", (int) SB));
-                    SB = 0;
-                    dis = 0;
-                }
-            }
-
-            if (action.steering == Steering.RIGHT && action.gear == Gear.REVERSE) {
-                RB += 1;
-            } else {
-                if (RB >= 1) {
-                    RB *= (L / (2 * Math.PI * Radius)) * 360;
-                    command.add(String.format("RB%03d", (int) RB));
-                    command.add(String.format("SB%03d", (int) dis));
-                    RB = 0;
-                    dis = 0;
-                }
-            }
-
-            prev = node;
-        }
-
-        if (LF >= 1) {
-            LF *= (L / (2 * Math.PI * Radius)) * 360;
-            command.add(String.format("LF%03d", (int) LF));
-            command.add(String.format("SF%03d", (int) dis));
-        }
-
-        if (SF >= 1) {
-            SF *= L;
-            command.add(String.format("SF%03d", (int) SF));
-        }
-
-        if (RF >= 1) {
-            RF *= (L / (2 * Math.PI * Radius)) * 360;
-            command.add(String.format("RF%03d", (int) RF));
-            command.add(String.format("SF%03d", (int) dis));
-        }
-
-        if (LB >= 1) {
-            LB *= (L / (2 * Math.PI * Radius)) * 360;
-            command.add(String.format("LB%03d", (int) LB));
-            command.add(String.format("SB%03d", (int) dis));
-        }
-
-        if (SB >= 1) {
-            SB *= L;
-            command.add(String.format("SB%03d", (int) SB));
-        }
-
-        if (RB >= 1) {
-            RB *= (L / (2 * Math.PI * Radius)) * 360;
-            command.add(String.format("RB%03d", (int) RB));
-            command.add(String.format("SB%03d", (int) dis));
-        }
-
-        System.out.println(command);
-        System.out.println(droid);
-        return command;
     }
 
     public static List<String> constructPath2(List<Node> path, double L, double Radius) {
@@ -203,6 +119,7 @@ public class PathCommand {
         //return new PathResult(commands, gridPath);
     }
 
+    //Used to serialize the path data for external use
     public static String constructJson(List<String> commands, List<int[]> path) {
         JSONObject json = new JSONObject();
         json.put("type", "NAVIGATION");
@@ -213,6 +130,8 @@ public class PathCommand {
         return json.toString();
     }
 
+    //A simple data structure to hold the list of commands and the grid path.
+    //Useful for returning the results of path construction methods.
     public static class PathResult {
         public List<String> commands;
         public List<int[]> path;
@@ -232,16 +151,4 @@ public class PathCommand {
         }
         return new PathResult(commands, gridPath);
     }
-
-    // public static class PathResult {
-    //     public List<String> commands;
-    //     public List<int[]> path;
-
-    //     public PathResult(List<String> commands, List<int[]> path) {
-    //         this.commands = commands;
-    //         this.path = path;
-    //     }
-    // }
-    
 }
-

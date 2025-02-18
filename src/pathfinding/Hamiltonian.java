@@ -1,7 +1,7 @@
 package pathfinding;
 
-import entities.Grid;
 import entities.Obstacle;
+import entities.OccupancyMap;
 import enums.Direction;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,14 +9,15 @@ import java.util.List;
 import simulation.*;
  
 public class Hamiltonian {
-    private Grid map;
+    private OccupancyMap map;
     private List<Obstacle> obstacles;
     private double[] start;
     private double thetaOffset;
     private String metric;
     private double minR;
 
-    public Hamiltonian(Grid map, List<Obstacle> obstacles, double x_start, double y_start, double theta_start, double theta_offset, String metric, double minR) {
+
+    public Hamiltonian(OccupancyMap map, List<Obstacle> obstacles, double x_start, double y_start, double theta_start, double theta_offset, String metric, double minR) {
         assert -Math.PI < theta_start && theta_start <= Math.PI;
         assert -Math.PI < theta_offset && theta_offset <= Math.PI;
         this.map = map;
@@ -27,10 +28,18 @@ public class Hamiltonian {
         this.minR = minR;
     }
 
+
+    public double[] getStart() {
+        // Return the starting position as a double array
+        return new double[]{10, 10, 0}; // Example values, replace with actual logic
+    }
+
+
     public List<Obstacle> findBruteForcePath() {
         List<List<Obstacle>> obstaclePermutations = generatePermutations(obstacles);
         double shortestDistance = Double.MAX_VALUE;
         List<Obstacle> shortestPath = null;
+
 
         for (List<Obstacle> obstaclePath : obstaclePermutations) {
             double[] currentPos = start;
@@ -56,10 +65,12 @@ public class Hamiltonian {
         return shortestPath;
     }
 
+
     public List<Obstacle> findNearestNeighborPath() {
         double[] currentPos = start;
         List<Obstacle> path = new ArrayList<>();
         List<Obstacle> remainingObstacles = new ArrayList<>(obstacles);
+
 
         while (!remainingObstacles.isEmpty()) {
             Obstacle nearestNeighbor = null;
@@ -92,11 +103,13 @@ public class Hamiltonian {
         return path;
     }
 
+
     private List<List<Obstacle>> generatePermutations(List<Obstacle> obstacles) {
         List<List<Obstacle>> permutations = new ArrayList<>();
         generatePermutations(obstacles, 0, permutations);
         return permutations;
     }
+
 
     private void generatePermutations(List<Obstacle> obstacles, int start, List<List<Obstacle>> permutations) {
         if (start == obstacles.size() - 1) {
@@ -110,17 +123,20 @@ public class Hamiltonian {
         }
     }
 
-    public static double[] obstacleToCheckpoint(Grid map, Obstacle obstacle, double thetaOffset) {
+
+    public static double[] obstacleToCheckpoint(OccupancyMap map, Obstacle obstacle, double thetaOffset) {
         double starting_x = Utils.gridToCoordsX(obstacle.getX());
         starting_x += offsetX(obstacle.getDirection());
         double starting_y = Utils.gridToCoordsY(obstacle.getY());
         starting_y += offsetY(obstacle.getDirection());
         double starting_image_to_pos_theta = offsetTheta(obstacle.getDirection(), Math.PI);
 
+
         double[] theta_scan_list = {0, Math.PI / 36, -Math.PI / 36, Math.PI / 18, -Math.PI / 18, Math.PI / 12, -Math.PI / 12,
                 Math.PI / 9, -Math.PI / 9, Math.PI / 7.2, -Math.PI / 7.2, Math.PI / 6, -Math.PI / 6,
                 Math.PI * 180 / 35, -Math.PI * 180 / 35, Math.PI / 4.5, -Math.PI / 4.5, Math.PI / 4, -Math.PI / 4};
         double[] r_scan_list = {20, 19, 21, 18, 22, 17, 23, 16, 24, 15, 25, 26, 27, 28, 29, 30};
+
 
         for (double r_scan : r_scan_list) {
             for (double theta_scan : theta_scan_list) {
@@ -129,9 +145,11 @@ public class Hamiltonian {
                 double cur_y = starting_y + r_scan * Math.sin(cur_image_to_pos_theta);
                 double theta = Utils.M(cur_image_to_pos_theta - thetaOffset);
 
-                if (!map.collideWithPoint(cur_x, cur_y) &&
-                        !map.collideWithPoint(cur_x + 0.5 * Consts.REAR_AXLE_TO_CENTER * Math.cos(theta), cur_y + 0.5 * Consts.REAR_AXLE_TO_CENTER * Math.sin(theta)) &&
-                        !map.collideWithPoint(cur_x - 0.5 * Consts.REAR_AXLE_TO_CENTER * Math.cos(theta), cur_y - 0.5 * Consts.REAR_AXLE_TO_CENTER * Math.sin(theta))) {
+
+                if (!map.isColliding((int)cur_x,(int) cur_y) &&
+                        !map.isColliding((int) (cur_x + 0.5 * Consts.REAR_AXLE_TO_CENTER * Math.cos(theta)), (int) (cur_y + 0.5 * Consts.REAR_AXLE_TO_CENTER * Math.sin(theta))) &&
+                        !map.isColliding((int) (cur_x - 0.5 * Consts.REAR_AXLE_TO_CENTER * Math.cos(theta)), (int) (cur_y - 0.5 * Consts.REAR_AXLE_TO_CENTER * Math.sin(theta)))) {
+
 
                     cur_x -= Consts.REAR_AXLE_TO_CENTER * Math.cos(theta);
                     cur_y -= Consts.REAR_AXLE_TO_CENTER * Math.sin(theta);
@@ -142,18 +160,22 @@ public class Hamiltonian {
         return null;
     }
 
-    public static List<double[]> obstacleToCheckpointAll(Grid map, Obstacle obstacle, double thetaOffset) {
+
+    public static List<double[]> obstacleToCheckpointAll(OccupancyMap map, Obstacle obstacle, double thetaOffset) {
         double starting_x = Utils.gridToCoordsX(obstacle.getX());
         starting_x += offsetX(obstacle.getDirection());
         double starting_y = Utils.gridToCoordsY(obstacle.getY());
         starting_y += offsetY(obstacle.getDirection());
         double starting_image_to_pos_theta = offsetTheta(obstacle.getDirection(), Math.PI);
 
+
         List<double[]> valid_checkpoints = new ArrayList<>();
+
 
         double[] theta_scan_list = {0, Math.PI / 36, -Math.PI / 36, Math.PI / 18, -Math.PI / 18, Math.PI / 12, -Math.PI / 12,
                 Math.PI / 9, -Math.PI / 9, Math.PI / 7.2, -Math.PI / 7.2, Math.PI / 6, -Math.PI / 6};
         double[] r_scan_list = {20, 19, 21, 18, 22, 17, 23, 16, 24, 15, 25, 26, 27, 28, 29, 30};
+
 
         for (double r_scan : r_scan_list) {
             for (double theta_scan : theta_scan_list) {
@@ -162,9 +184,11 @@ public class Hamiltonian {
                 double cur_y = starting_y + r_scan * Math.sin(cur_image_to_pos_theta);
                 double theta = Utils.M(cur_image_to_pos_theta - thetaOffset);
 
-                if (!map.collideWithPoint(cur_x, cur_y) &&
-                        !map.collideWithPoint(cur_x + 0.5 * Consts.REAR_AXLE_TO_CENTER * Math.cos(theta), cur_y + 0.5 * Consts.REAR_AXLE_TO_CENTER * Math.sin(theta)) &&
-                        !map.collideWithPoint(cur_x - 0.5 * Consts.REAR_AXLE_TO_CENTER * Math.cos(theta), cur_y - 0.5 * Consts.REAR_AXLE_TO_CENTER * Math.sin(theta))) {
+
+                if (!map.isColliding((int)cur_x,(int) cur_y) &&
+                        !map.isColliding((int) (cur_x + 0.5 * Consts.REAR_AXLE_TO_CENTER * Math.cos(theta)), (int) (cur_y + 0.5 * Consts.REAR_AXLE_TO_CENTER * Math.sin(theta))) &&
+                        !map.isColliding((int) (cur_x - 0.5 * Consts.REAR_AXLE_TO_CENTER * Math.cos(theta)), (int) (cur_y - 0.5 * Consts.REAR_AXLE_TO_CENTER * Math.sin(theta)))) {
+
 
                     cur_x -= Consts.REAR_AXLE_TO_CENTER * Math.cos(theta);
                     cur_y -= Consts.REAR_AXLE_TO_CENTER * Math.sin(theta);
@@ -177,10 +201,10 @@ public class Hamiltonian {
 
     private static double offsetX(Direction facing) {
         return switch (facing) {
-            case NORTH -> 5.0;
-            case SOUTH -> 5.0;
+            case NORTH -> 2.5; //5
+            case SOUTH -> 2.5; //5
             case EAST -> 0.0;
-            case WEST -> 10.0;
+            case WEST -> 5.0;  //10
             default -> throw new IllegalArgumentException("Invalid facing direction: " + facing);
         };
     }
@@ -188,9 +212,9 @@ public class Hamiltonian {
     private static double offsetY(Direction facing) {
         return switch (facing) {
             case NORTH -> 0.0;
-            case SOUTH -> 10.0;
-            case EAST -> 5.0;
-            case WEST -> 5.0;
+            case SOUTH -> 5.0; //10
+            case EAST -> 2.5;   //5
+            case WEST -> 2.5;   //5
             default -> throw new IllegalArgumentException("Invalid facing direction: " + facing);
         };
     }
@@ -200,7 +224,7 @@ public class Hamiltonian {
     }
 
     public static List<Obstacle> generateRandomObstacles(int grid_size, int obstacle_count) {
-        int offset = grid_size < 100 ? 5 : 50;
+        int offset = grid_size < 100 ? 2 : 10;  //5 : 50
         List<Obstacle> obstacles = new ArrayList<>();
         Direction[] directions = {Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST};
         int i = 0;
@@ -245,25 +269,26 @@ public class Hamiltonian {
             System.out.println();
         }
     }
-    
+   
 
     public static void main(String[] args) {
         List<Obstacle> obstacles = List.of(
-                new Obstacle(10, 10, Direction.NORTH, 0),
-                new Obstacle(20, 10, Direction.SOUTH, 1),   
-                new Obstacle(10, 20, Direction.EAST, 2),        
-                new Obstacle(20, 20, Direction.WEST, 3),  
-                new Obstacle(38, 38, Direction.NORTH, 4)
+            new Obstacle(10, 10, Direction.NORTH, 0),
+            new Obstacle(10, 5, Direction.SOUTH, 1),
+            new Obstacle(5, 10, Direction.EAST, 2),
+            new Obstacle(8, 6, Direction.WEST, 3),
+            new Obstacle(15, 9, Direction.NORTH, 4)
+            // new Obstacle(10, 10, Direction.NORTH, 0),
+                // new Obstacle(20, 10, Direction.SOUTH, 1),  
+                // new Obstacle(10, 20, Direction.EAST, 2),        
+                // new Obstacle(20, 20, Direction.WEST, 3),  
+                // new Obstacle(38, 38, Direction.NORTH, 4)
         );
-        Grid map = new Grid(40, 40);
-        for (Obstacle obstacle : obstacles) {
-            map.addObstacle(obstacle);
-        }
-        //Hamiltonian tsp = new Hamiltonian(map, obstacles, 5, 15, 0, -Math.PI / 2, "euclidean", 25);
-        Hamiltonian tsp = new Hamiltonian(map, new ArrayList<>(obstacles), 10, 10, 0, -Math.PI / 2, "euclidean", 25);
+        OccupancyMap map = new OccupancyMap(obstacles);
+        // Hamiltonian tsp = new Hamiltonian(map, obstacles, 5, 15, 0, -Math.PI / 2, "euclidean", 25);
+        Hamiltonian tsp = new Hamiltonian(map, obstacles, 1, 1, 0, -Math.PI / 2, "euclidean", 25);
         List<Obstacle> path = tsp.findNearestNeighborPath();
         System.out.println("\nShortest Path:");
         System.out.println(path);
     }
 }
-

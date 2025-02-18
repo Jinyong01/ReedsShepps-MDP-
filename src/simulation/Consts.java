@@ -1,7 +1,9 @@
 package simulation;
 
 public class Consts {
-    public static final int GRID_SIZE = 20;
+    public static final int GRID_SIZE = 20; // 20x20 grid
+    public static final double MAP_SIZE_CM = 200.0; // 200x200cm map
+    public static final double CELL_SIZE_CM = MAP_SIZE_CM / GRID_SIZE; // 10cm per cell
 
     // Simulation parameters
     public static final int WIDTH = 1200;
