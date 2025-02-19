@@ -242,15 +242,15 @@ public class Hybrid_astar {
     public static void main(String[] args) {
         List<Obstacle> obstacles = List.of(
                 new Obstacle(10, 10, Direction.NORTH, 0),
-                new Obstacle(10, 5, Direction.SOUTH, 1),
-                new Obstacle(5, 10, Direction.EAST, 2),
-                new Obstacle(8, 6, Direction.WEST, 3),
-                new Obstacle(15, 9, Direction.NORTH, 4)
+                new Obstacle(10, 5, Direction.SOUTH, 1)//,
+                // new Obstacle(5, 10, Direction.EAST, 2),
+                // new Obstacle(8, 6, Direction.WEST, 3),
+                // new Obstacle(15, 9, Direction.NORTH, 4)
         );
 
         OccupancyMap map = new OccupancyMap(obstacles);
 
-        Hybrid_astar algo = new Hybrid_astar(map, 1, 1, Math.PI / 2, 12, 18, Math.PI / 2, 0, 10, 10, 5, 25, "greedy", false, 24);
+        Hybrid_astar algo = new Hybrid_astar(map, 15, 10, Math.PI / 2, 15, 17, Math.PI / 2, 0, 10, 10, 5, 25, "greedy", false, 24);
         List<Node> path = algo.findPath();
 
         if (path != null) {

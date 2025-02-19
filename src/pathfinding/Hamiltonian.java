@@ -31,7 +31,7 @@ public class Hamiltonian {
 
     public double[] getStart() {
         // Return the starting position as a double array
-        return new double[]{10, 10, 0}; // Example values, replace with actual logic
+        return new double[]{15, 10, Math.PI / 2}; // Example values, replace with actual logic
     }
 
 
@@ -132,10 +132,13 @@ public class Hamiltonian {
         double starting_image_to_pos_theta = offsetTheta(obstacle.getDirection(), Math.PI);
 
 
+        // double[] theta_scan_list = {0, Math.PI / 36, -Math.PI / 36, Math.PI / 18, -Math.PI / 18, Math.PI / 12, -Math.PI / 12,
+        //         Math.PI / 9, -Math.PI / 9, Math.PI / 7.2, -Math.PI / 7.2, Math.PI / 6, -Math.PI / 6,
+        //         Math.PI * 180 / 35, -Math.PI * 180 / 35, Math.PI / 4.5, -Math.PI / 4.5, Math.PI / 4, -Math.PI / 4};
+        // double[] r_scan_list = {20, 19, 21, 18, 22, 17, 23, 16, 24, 15, 25, 26, 27, 28, 29, 30};
         double[] theta_scan_list = {0, Math.PI / 36, -Math.PI / 36, Math.PI / 18, -Math.PI / 18, Math.PI / 12, -Math.PI / 12,
-                Math.PI / 9, -Math.PI / 9, Math.PI / 7.2, -Math.PI / 7.2, Math.PI / 6, -Math.PI / 6,
-                Math.PI * 180 / 35, -Math.PI * 180 / 35, Math.PI / 4.5, -Math.PI / 4.5, Math.PI / 4, -Math.PI / 4};
-        double[] r_scan_list = {20, 19, 21, 18, 22, 17, 23, 16, 24, 15, 25, 26, 27, 28, 29, 30};
+            Math.PI / 9, -Math.PI / 9, Math.PI / 7.2, -Math.PI / 7.2, Math.PI / 6, -Math.PI / 6};
+        double[] r_scan_list = {10, 9.5, 10.5, 9, 11, 8.5, 11.5, 8, 12, 7.5, 12.5, 13, 13.5, 14, 14.5, 15};
 
 
         for (double r_scan : r_scan_list) {
@@ -172,9 +175,13 @@ public class Hamiltonian {
         List<double[]> valid_checkpoints = new ArrayList<>();
 
 
+        // double[] theta_scan_list = {0, Math.PI / 36, -Math.PI / 36, Math.PI / 18, -Math.PI / 18, Math.PI / 12, -Math.PI / 12,
+        //         Math.PI / 9, -Math.PI / 9, Math.PI / 7.2, -Math.PI / 7.2, Math.PI / 6, -Math.PI / 6};
+        // double[] r_scan_list = {20, 19, 21, 18, 22, 17, 23, 16, 24, 15, 25, 26, 27, 28, 29, 30};
+        // Adjusted scan lists for a 20x20 grid
         double[] theta_scan_list = {0, Math.PI / 36, -Math.PI / 36, Math.PI / 18, -Math.PI / 18, Math.PI / 12, -Math.PI / 12,
-                Math.PI / 9, -Math.PI / 9, Math.PI / 7.2, -Math.PI / 7.2, Math.PI / 6, -Math.PI / 6};
-        double[] r_scan_list = {20, 19, 21, 18, 22, 17, 23, 16, 24, 15, 25, 26, 27, 28, 29, 30};
+            Math.PI / 9, -Math.PI / 9, Math.PI / 7.2, -Math.PI / 7.2, Math.PI / 6, -Math.PI / 6};
+        double[] r_scan_list = {10, 9.5, 10.5, 9, 11, 8.5, 11.5, 8, 12, 7.5, 12.5, 13, 13.5, 14, 14.5, 15};
 
 
         for (double r_scan : r_scan_list) {
@@ -273,7 +280,7 @@ public class Hamiltonian {
 
     public static void main(String[] args) {
         List<Obstacle> obstacles = List.of(
-            new Obstacle(10, 10, Direction.NORTH, 0),
+            new Obstacle(5, 5, Direction.NORTH, 0),
             new Obstacle(10, 5, Direction.SOUTH, 1),
             new Obstacle(5, 10, Direction.EAST, 2),
             new Obstacle(8, 6, Direction.WEST, 3),

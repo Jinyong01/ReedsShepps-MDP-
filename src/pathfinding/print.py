@@ -69,9 +69,10 @@ import json
 import math
 
 # Define obstacles correctly as a list of lists
-obstacles = [[40, 20, -math.pi / 2], [70, 80, -math.pi / 2]]#, [90, 30, 0]]
+obstacles = [[40, 50, - math.pi/2 ], [70, 90, -math.pi / 2], [90, 30, 0], [140, 60, math.pi], [130, 100, -math.pi]]
 
-start = (10, 10, np.pi / 2)  # (x, y, theta)
+start = (15, 10, np.pi / 2)  # (x, y, theta)
+#start = (20, 10, 0)  # (x, y, theta)
 grid_map = np.zeros((200, 200))  # Example map (0 = free, 1 = obstacle)
 obstacle_occupancy = np.ones((30, 30))
 

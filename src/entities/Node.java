@@ -29,6 +29,8 @@ public class Node implements Comparable<Node> {
         this.f = 0;
         this.x_g = discretizePosition(x);
         this.y_g = discretizePosition(y);
+        // this.y_g = (int)y;
+        // this.x_g =(int)x;
         this.theta_g = discretizeTheta(theta);
     }
 
@@ -43,7 +45,7 @@ public class Node implements Comparable<Node> {
 
     private int discretizePosition(double position) {
         int discretizedPosition = (int) (position / (200.0 / 20));
-        if (discretizedPosition < 0 || discretizedPosition >= 20) {
+        if (discretizedPosition < 0 || discretizedPosition >= 20) {   //initially <0 , >=20
             throw new IllegalArgumentException("Position out of bounds: " + position);
         }
         return discretizedPosition;

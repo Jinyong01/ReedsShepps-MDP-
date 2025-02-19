@@ -43,7 +43,7 @@ public class Task1 {
 
 
         OccupancyMap map = new OccupancyMap(obstacles);
-        Hamiltonian tsp = new Hamiltonian(map, obstacles, 10, 10, 0, -Math.PI / 2, "euclidean", minR);
+        Hamiltonian tsp = new Hamiltonian(map, obstacles, 15, 10,Math.PI /2 , -Math.PI / 2, "euclidean", minR); 
         double[] currentPos = tsp.getStart(); //Hardcoded this
         List<Obstacle> obstaclePath = tsp.findNearestNeighborPath();
 
@@ -127,9 +127,12 @@ public class Task1 {
 
         // Add obstacles to the message
         JSONArray obstaclesArray = new JSONArray();
-        obstaclesArray.put(new JSONObject().put("id", "00").put("x", 4).put("y", 2).put("dir", "S"));
-        obstaclesArray.put(new JSONObject().put("id", "01").put("x", 7).put("y", 8).put("dir", "S"));
-        //obstaclesArray.put(new JSONObject().put("id", "02").put("x", 9).put("y", 3).put("dir", "E"));
+        obstaclesArray.put(new JSONObject().put("id", "00").put("x", 4).put("y", 5).put("dir", "S"));
+        obstaclesArray.put(new JSONObject().put("id", "01").put("x", 7).put("y", 9).put("dir", "S"));
+        obstaclesArray.put(new JSONObject().put("id", "02").put("x", 9).put("y", 3).put("dir", "E"));
+        obstaclesArray.put(new JSONObject().put("id", "03").put("x", 14).put("y", 6).put("dir", "W"));
+        obstaclesArray.put(new JSONObject().put("id", "04").put("x", 13).put("y", 10).put("dir", "S"));
+
 
         message.getJSONObject("data").put("obstacles", obstaclesArray);
 
