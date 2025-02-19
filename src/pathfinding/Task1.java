@@ -47,6 +47,8 @@ public class Task1 {
         double[] currentPos = tsp.getStart(); //Hardcoded this
         List<Obstacle> obstaclePath = tsp.findNearestNeighborPath();
 
+        List<Node> fullPath = new ArrayList<>();
+
         for (Obstacle obstacle : obstaclePath) {
             List<double[]> validCheckpoints = Hamiltonian.obstacleToCheckpointAll(map, obstacle, -Math.PI / 2);
             List<Node> path = null;
@@ -67,7 +69,7 @@ public class Task1 {
 
 
             if (path != null) {
-                this.paths.addAll(path);
+                fullPath.addAll(path);
                 currentPos = new double[]{path.get(path.size() - 1).getX(), path.get(path.size() - 1).getY(), path.get(path.size() - 1).getTheta()};
                 List<String> commandsList = PathCommand.constructPath2(path, L, minR);
                 this.commands.add(commandsList);
@@ -78,6 +80,8 @@ public class Task1 {
                 System.out.println("Path could not be found, routing to next obstacle...");
             }
         }
+        // Save the full path to a file
+        PathCommand.printFullPath(fullPath);
     }
 
 
@@ -128,10 +132,10 @@ public class Task1 {
         // Add obstacles to the message
         JSONArray obstaclesArray = new JSONArray();
         obstaclesArray.put(new JSONObject().put("id", "00").put("x", 4).put("y", 5).put("dir", "S"));
-        obstaclesArray.put(new JSONObject().put("id", "01").put("x", 7).put("y", 9).put("dir", "S"));
-        obstaclesArray.put(new JSONObject().put("id", "02").put("x", 9).put("y", 3).put("dir", "E"));
-        obstaclesArray.put(new JSONObject().put("id", "03").put("x", 14).put("y", 6).put("dir", "W"));
-        obstaclesArray.put(new JSONObject().put("id", "04").put("x", 13).put("y", 10).put("dir", "S"));
+        obstaclesArray.put(new JSONObject().put("id", "01").put("x", 4).put("y", 16).put("dir", "S"));
+        obstaclesArray.put(new JSONObject().put("id", "02").put("x", 15).put("y", 16).put("dir", "W"));
+        obstaclesArray.put(new JSONObject().put("id", "03").put("x", 15).put("y", 5).put("dir", "W"));
+        obstaclesArray.put(new JSONObject().put("id", "04").put("x", 9).put("y", 11).put("dir", "S"));
 
 
         message.getJSONObject("data").put("obstacles", obstaclesArray);

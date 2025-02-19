@@ -16,47 +16,46 @@ import org.json.JSONObject;
 public class PathCommand {
 
     public static void printPath(List<Node> path) {
-        File fileObj = new File("nodes.json");
-        System.out.println("File will be written to: " + fileObj.getAbsolutePath());
-
-        try (FileWriter file = new FileWriter(fileObj)) {
-                file.write("[\n");
-                
-                boolean first = true;
-                // Iterate using the enhanced for-loop
-                for (Node node : path) {
-                    // If not the first element, add a comma before starting a new JSON object
-                    if (!first) {
-                        file.write(",\n");
-                    }
-                    first = false;
-                    
-                    // Print the node to the console
-                    System.out.println(node.getX() + " " + node.getY() + " " + node.getTheta());
-    
-                    // Write the node in JSON format
-                    file.write("  {\n");
-                    file.write("    \"x\": " + node.getX() + ",\n");
-                    file.write("    \"y\": " + node.getY() + ",\n");
-                    file.write("    \"theta\": " + node.getTheta() + "\n");
-                    file.write("  }");
-                }
-                
-                file.write("\n]");
-                System.out.println("Data has been written to nodes.json");
-            }
-    
-    
-        catch (IOException e) {
-                // Handle the exception by printing the stack trace or taking other appropriate action
-                e.printStackTrace();
-            }
-
         for (Node node : path) {
             System.out.println(
                 String.format("Current Node (x:%.2f, y:%.2f, theta:%.2f), Action: %s",
-                        node.x, node.y, node.theta * 180 / Math.PI, node.prevAction));          //convert rad to degree
+                        node.x, node.y, node.theta * 180 / Math.PI, node.prevAction));
         }
+    }
+
+    public static void printFullPath(List<Node> fullPath) {
+        File fileObj = new File("full_path.json");
+        System.out.println("File will be written to: " + fileObj.getAbsolutePath());
+
+        try (FileWriter file = new FileWriter(fileObj)) {
+            file.write("[\n");
+
+            boolean first = true;
+            for (Node node : fullPath) {
+                if (!first) {
+                    file.write(",\n");
+                }
+                first = false;
+
+                file.write("  {\n");
+                file.write("    \"x\": " + node.getX() + ",\n");
+                file.write("    \"y\": " + node.getY() + ",\n");
+                file.write("    \"theta\": " + node.getTheta() + "\n");
+                file.write("  }");
+            }
+
+            file.write("\n]");
+            System.out.println("Data has been written to " + fileObj.getName());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+
+        // for (Node node : path) {
+        //     System.out.println(
+        //         String.format("Current Node (x:%.2f, y:%.2f, theta:%.2f), Action: %s",
+        //                 node.x, node.y, node.theta * 180 / Math.PI, node.prevAction));          //convert rad to degree
+        // }
     }
     //Basically calculate euclidean distance 
     public static double distance(Node prev, Node node) {

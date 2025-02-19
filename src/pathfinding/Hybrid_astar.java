@@ -211,34 +211,6 @@ public class Hybrid_astar {
         return true;
     }
 
-    // public static void main(String[] args) {
-    //     List<Obstacle> obstacles = List.of(
-    //             //new Obstacle(4, 2, Direction.NORTH, 0) //10, 10
-    //             //new Obstacle(5, 8, Direction.WEST, 1)   //x:20, y:10
-    //             //new Obstacle(5, 3, Direction.EAST, 2),    //x:10 , y:20
-    //             //new Obstacle(8, 8, Direction.WEST, 3)    //x:20, y:20
-    //             //new Obstacle(1, 18, Direction.NORTH, 4)    //38,38
-    //     );
-
-    //     OccupancyMap map = new OccupancyMap(obstacles);
-
-    //     Hybrid_astar algo = new Hybrid_astar(map, 10, 10, Math.PI / 2, 12, 180, Math.PI / 2, 0, 10, 10, 5, 25, "greedy", false, 24);
-    //     List<Node> path = algo.findPath();
-
-        
-    //     if (path != null) {
-            
-
-    //         for (Node node : path) {
-    //             System.out.println(String.format("Current Node (x:%.2f, y:%.2f, theta:%.2f), Action: %s",
-    //                     node.x, node.y, node.theta * 180 / Math.PI, node.prevAction));
-    //             }
-    
-    //     } else {
-    //         System.out.println("No path found.");
-    //     }
-    // }
-
     public static void main(String[] args) {
         List<Obstacle> obstacles = List.of(
                 new Obstacle(10, 10, Direction.NORTH, 0),
@@ -250,7 +222,7 @@ public class Hybrid_astar {
 
         OccupancyMap map = new OccupancyMap(obstacles);
 
-        Hybrid_astar algo = new Hybrid_astar(map, 15, 10, Math.PI / 2, 15, 17, Math.PI / 2, 0, 10, 10, 5, 25, "greedy", false, 24);
+        Hybrid_astar algo = new Hybrid_astar(map, 15, 10, Math.PI / 2, 15, 18, Math.PI / 2, 0, 10, 10, 5, 25, "greedy", false, 24);
         List<Node> path = algo.findPath();
 
         if (path != null) {
@@ -263,3 +235,4 @@ public class Hybrid_astar {
         }
     }
 }
+

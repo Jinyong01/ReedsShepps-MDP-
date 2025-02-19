@@ -69,7 +69,7 @@ import json
 import math
 
 # Define obstacles correctly as a list of lists
-obstacles = [[40, 50, - math.pi/2 ], [70, 90, -math.pi / 2], [90, 30, 0], [140, 60, math.pi], [130, 100, -math.pi]]
+obstacles = [[40, 50, - math.pi/2 ], [40, 160, -math.pi / 2], [150, 160, math.pi], [150, 50, math.pi], [90, 110, -math.pi]]
 
 start = (15, 10, np.pi / 2)  # (x, y, theta)
 #start = (20, 10, 0)  # (x, y, theta)
@@ -77,7 +77,7 @@ grid_map = np.zeros((200, 200))  # Example map (0 = free, 1 = obstacle)
 obstacle_occupancy = np.ones((30, 30))
 
 # Read target data from a JSON file
-with open("nodes.json", 'r') as f:
+with open("data.json", 'r') as f:
     data = json.load(f)
 
 print(data)
